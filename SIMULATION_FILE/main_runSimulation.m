@@ -3,7 +3,7 @@
 % Department of Electrical and Electronic Engineering
 % University of Cagliari, Italy
 % Fabio Tinazzi
-% Department of Mana    gement and Engineering
+% Department of Management and Engineering
 % University of Padova, Italy
 % Ludovico Ortombina
 % Department of Industrial Engineering
@@ -44,14 +44,13 @@ UserDataName = 'MVC2025';
 close_figure = 'no';
 
 %% References
-
+% Uncomment the desired reference cycle to be implemented during the simulation
 reference1;
 
 %%%
-% The evaluation of the proposals will be carried out with the "timafactor 
-% = 60" option. Users can change the timefactor to speed up the simulation,
-% but the results and behaviour of the system might be different from what 
-% expected. 
+% The evaluation of the proposals will be carried out with the "timefactor 
+% = 60" option. All simulation parameters are computed accordingly. The 
+% "timefactor" will not be modified for the final evaluation.
 timefactor = 60; 
 V_star.time = V_star.time/timefactor;
 Tsim = V_star.time(end)*60/timefactor;
