@@ -8,7 +8,16 @@ The topic of the challenge is to develop an <mark>Energy Management System</mark
 * a battery pack (BP)
 * a supercapacitor module (SM)
 
+
+## Rules
 The participants to the challenge will operate only in the EMS block provided within the simulation file. All the remaining blocks must not be modified. <ins>The final evaluation will be carried out by implementing the EMS block developed by each participant in the original simulation file</ins>. That is, <mark>all the modifications made in subsystems which are not the EMS one will be discarded</mark>. 
+
+Other important rules:
+* all parameters defined in the "Parameters" folder can be used to develop the strategy...
+* all parameter defined in the "Reference" folder and "main_runSimulation.m" **cannot** be used to develop the strategy: the EMS **must not** adopt whatsoever a priori knowledge of the reference working cycle.
+* all parameters adopted for the developed strategy **must** be specified in the "ProposedEMS.m"...
+* Energy constraints must be always guaranteed... (pena esclusione)
+* 
 
 ## Release Notes
 Please refer to the change log.
