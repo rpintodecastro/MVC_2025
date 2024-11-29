@@ -20,7 +20,7 @@ Other important rules:
 * 
 
 ## Release Notes
-Please refer to the change log.
+Please refer to the [CHANGELOG.md](https://github.com/VTSociety/MVC_2025/blob/main/CHANGELOG.md) file for modifications of the simulation and differences with respect to the paper in the [Bibliography](), that is [10.1109/VPPC63154.2024.10755298](https://ieeexplore.ieee.org/document/10755298) (CARICA IL PREPRINT).
 
 Remarks:
 * Please take notice of the [Discussion board](https://github.com/VTSociety/MVC_2025/discussions) for Q&A. Start a new discussion if you've found no answer to your issue. No answers will be given to questions related the MVC 2025 by private emails.
