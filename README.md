@@ -1,5 +1,5 @@
 # MVC_2025
-Repository of the 2025 IEEE VTS Motor Vehicle Challenge (MVC)
+Repository of the 2025 IEEE VTS Motor Vehicle Challenge (MVC). Please refere to the [INSTALLATION.md](INSTALLATION.md) file for instruction about how to use the software and the necessary software requirements.
 
 ## Introduction
 ![VPPC2024_MVC2025_Fig01c](https://github.com/user-attachments/assets/3058258b-4cb9-44c9-a135-982c7fad2200)
