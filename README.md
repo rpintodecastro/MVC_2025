@@ -1,5 +1,6 @@
 # MVC_2025
 Repository of the 2025 IEEE VTS Motor Vehicle Challenge (MVC). Please refer to the [INSTALLATION.md](INSTALLATION.md) file for instructions about how to use the software and the necessary software requirements.
+The website of the challenge is [here](https://vtsociety.org/event/meeting/ieee-vts-motor-vehicles-challenge-2025).
 
 ## Introduction
 ![VPPC2024_MVC2025_Fig01c](https://github.com/user-attachments/assets/3058258b-4cb9-44c9-a135-982c7fad2200)
@@ -7,6 +8,13 @@ Repository of the 2025 IEEE VTS Motor Vehicle Challenge (MVC). Please refer to t
 The topic of the challenge is to develop an <mark>Energy Management System</mark> (EMS) for a tugboat application. The tugboat powertrain consists of a dual-three phase permanent magnet synchronous motor where each of the two three phase windings are fed by a three phase inverter. The power source of each inverter is different, that is the following two energy sources are employed:
 * a battery pack (BP)
 * a supercapacitor module (SM)
+
+## Submission of proposal
+[SUBMISSION LINK](https://forms.gle/N4LjFR53m6wfZPHh6)
+
+The proposal(s) must be submitted by using the above link. The deadline for the proposal submission is <mark>17th of March, 2025</mark>.
+
+For safety reasons, the submission can be made only by people with a Gmail account. In the form, it is possible to indicate the academic/industrial contact. If the possession of a Gmail account is an issue, please contact MVC 2025 organizers.
 
 
 ## Rules
