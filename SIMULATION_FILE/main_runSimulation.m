@@ -66,7 +66,7 @@ ControlSysParameters;
 % variables necessary for their solution."
 % The file BaseEMS must be commented out.
 BaseEMS;
-% ProposedEMS;
+ProposedEMS;
 
 %% Run simulation
 tic
