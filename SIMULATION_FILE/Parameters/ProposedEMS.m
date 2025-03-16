@@ -7,11 +7,13 @@
 
 
 mdl = "MVC2025_sim"; % name of the model
-AGENT_FNAME = "finalAgent.mat";
+%AGENT_FNAME = "finalAgent.mat";
+AGENT_FNAME = "finalAgent_3_16_finalScore_1400.mat"; % score of 1400
 
-%EMS_TYPE = "Baseline"; 
-EMS_TYPE ="EvaluateRL";
-%EMS_TYPE ="TrainRL";
+%EMS_TYPE = "Baseline"; % evaluate the baseline solution provided by organizers
+
+EMS_TYPE ="EvaluateRL"; % RL agent 
+%EMS_TYPE ="TrainRL";  % train rl agent
 
 
 load(AGENT_FNAME);
@@ -23,23 +25,27 @@ switch EMS_TYPE
     case "EvaluateRL"        
         
     case "TrainRL"
-        doTraining = true;
         
-        %% TRAINING INFORMATION 
-        if doTraining
-            Tsim = 30; %[s] % override simulation time to make it faster?
-            % Ts; % sample time
-        end
         
+        %% TRAINING INFORMATION         
+        Tsim = 50; %[s] % override simulation time to make it faster?
+        % Ts; % sample time        
+        maxepisodes = 100;
+        agentSampleTime = 0.1;
+        %agentSampleTime = Ts;
+        maxsteps = ceil(Tsim/agentSampleTime);        
+        StopTrainingValue=0; % condition to stop
+
+        %-----------------------------------------------------
         %To create a specification object for an action channel carrying a continuous signal, use rlNumericSpec.
         actionInfo = rlNumericSpec([1 1],...
-            LowerLimit=[-3  ]',...
-            UpperLimit=[ 3]' );
+            LowerLimit=[-1  ]',...
+            UpperLimit=[ 1]' );
         actionInfo.Name = "delta_TE";
         
         
-        %Create a three-element vector of observation specifications. 
-        observationInfo = rlNumericSpec([7 1]);
+        %Create a vector of observation specifications. 
+        observationInfo = rlNumericSpec([3 1]);
         observationInfo.Name = "observations";
         %observationInfo.Description = "integrated error, error, and measured height";
         
@@ -55,35 +61,37 @@ switch EMS_TYPE
         
         % Create DDPG Agent
         %https://www.mathworks.com/help/releases/R2024b/reinforcement-learning/ug/train-ddpg-agent-to-swing-up-and-balance-pendulum.html
-        agent = rlDDPGAgent(observationInfo,actionInfo);
+        initOpts = rlAgentInitializationOptions(NumHiddenUnit=200);
+        agent = rlDDPGAgent(observationInfo,actionInfo,initOpts);
         
         % To ensure that the RL Agent block in the environment executes every Ts seconds (instead of the default one second), set the SampleTime property of the agent.
-        agent.AgentOptions.SampleTime = 0.5;
+        agent.AgentOptions.SampleTime = agentSampleTime;
+        %agent.AgentOptions.SampleTime = 1;
         
-        %Set a lower learning rate and gradient thresholds to avoid instability.
+        % %Set a lower learning rate and gradient thresholds to avoid instability.
         agent.AgentOptions.CriticOptimizerOptions.LearnRate = 1e-3;
         agent.AgentOptions.ActorOptimizerOptions.LearnRate = 1e-3;
         agent.AgentOptions.CriticOptimizerOptions.GradientThreshold = 1;
         agent.AgentOptions.ActorOptimizerOptions.GradientThreshold = 1;
-        
-        %Increase the length of the experience buffer and the size of the mini buffer.
-        agent.AgentOptions.ExperienceBufferLength = 1e5;
+        % 
+        % %Increase the length of the experience buffer and the size of the mini buffer.
+        % agent.AgentOptions.ExperienceBufferLength = 1e5;
         agent.AgentOptions.MiniBatchSize = 128;
         
         % Train agent
-        maxepisodes = 1000;
-        maxsteps = ceil(Tsim/agent.AgentOptions.SampleTime);
-        StopTrainingValue=10;
+        
+        
         trainOpts = rlTrainingOptions(...
             MaxEpisodes=maxepisodes,...
-            MaxStepsPerEpisode=maxsteps,...
+            MaxStepsPerEpisode=maxsteps,... 
             ScoreAveragingWindowLength=5,...
-            Verbose=false,...
             Plots="training-progress",...
-            StopTrainingCriteria="EvaluationStatistic",...
-            StopTrainingValue=StopTrainingValue,...
+             StopTrainingCriteria = "none",...            
             SaveAgentCriteria="EvaluationStatistic",...
-            SaveAgentValue=StopTrainingValue);
+            SaveAgentValue=StopTrainingValue);  % no stop criteria
+%StopTrainingCriteria="EvaluationStatistic" 
+            %StopTrainingValue=StopTrainingValue,...
+            
         
         
         
@@ -98,5 +106,5 @@ switch EMS_TYPE
             % save results
             save(AGENT_FNAME,'agent')
 
-    
+            % reinforcementLearningDesigner
 end
