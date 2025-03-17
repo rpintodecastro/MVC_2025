@@ -8,21 +8,19 @@
 
 mdl = "MVC2025_sim"; % name of the model
 %AGENT_FNAME = "finalAgent.mat";
-AGENT_FNAME = "finalAgent_3_16_finalScore_1400.mat"; % score of 1400
+AGENT_FNAME = "finalAgent_3_17_finalScore.mat"; % score of 1400
 
-%EMS_TYPE = "Baseline"; % evaluate the baseline solution provided by organizers
-
+EMS_TYPE = "Baseline"; % evaluate the baseline solution provided by organizers
 EMS_TYPE ="EvaluateRL"; % RL agent 
-%EMS_TYPE ="TrainRL";  % train rl agent
+EMS_TYPE ="TrainRL";  % train rl agent
 
-
-load(AGENT_FNAME);
+% load(AGENT_FNAME);
 RLgain = 1; % enable RL agent
 
 switch EMS_TYPE
     case "Baseline"
         RLgain =0; % disable RL agent
-    case "EvaluateRL"        
+    case "EvaluateRL"
         
     case "TrainRL"
         
@@ -30,8 +28,11 @@ switch EMS_TYPE
         %% TRAINING INFORMATION         
         Tsim = 50; %[s] % override simulation time to make it faster?
         % Ts; % sample time        
-        maxepisodes = 100;
-        agentSampleTime = 0.1;
+        maxepisodes = 5;
+        %agentSampleTime = 0.1; % good performane, but with oscillation
+        agentSampleTime = Ts;
+        NumHiddenUnit = 64; 
+
         %agentSampleTime = Ts;
         maxsteps = ceil(Tsim/agentSampleTime);        
         StopTrainingValue=0; % condition to stop
@@ -45,7 +46,7 @@ switch EMS_TYPE
         
         
         %Create a vector of observation specifications. 
-        observationInfo = rlNumericSpec([3 1]);
+        observationInfo = rlNumericSpec([4 1]);
         observationInfo.Name = "observations";
         %observationInfo.Description = "integrated error, error, and measured height";
         
@@ -61,7 +62,7 @@ switch EMS_TYPE
         
         % Create DDPG Agent
         %https://www.mathworks.com/help/releases/R2024b/reinforcement-learning/ug/train-ddpg-agent-to-swing-up-and-balance-pendulum.html
-        initOpts = rlAgentInitializationOptions(NumHiddenUnit=200);
+        initOpts = rlAgentInitializationOptions(NumHiddenUnit=NumHiddenUnit);
         agent = rlDDPGAgent(observationInfo,actionInfo,initOpts);
         
         % To ensure that the RL Agent block in the environment executes every Ts seconds (instead of the default one second), set the SampleTime property of the agent.
@@ -83,25 +84,24 @@ switch EMS_TYPE
         
         trainOpts = rlTrainingOptions(...
             MaxEpisodes=maxepisodes,...
-            MaxStepsPerEpisode=maxsteps,... 
+            MaxStepsPerEpisode=maxsteps,...
             ScoreAveragingWindowLength=5,...
             Plots="training-progress",...
-             StopTrainingCriteria = "none",...            
-            SaveAgentCriteria="EvaluationStatistic",...
-            SaveAgentValue=StopTrainingValue);  % no stop criteria
-%StopTrainingCriteria="EvaluationStatistic" 
+            StopTrainingCriteria="EpisodeSteps" ,...
+            StopTrainingValue=maxsteps ,...
+            SaveAgentCriteria="EpisodeCount",...
+            SaveAgentValue=1,...
+            SaveAgentDirectory=pwd + "\Agents_checkpoints");  % no stop criteria
+%StopTrainingCriteria="none" 
             %StopTrainingValue=StopTrainingValue,...
-            
-        
-        
         
             % Use the rlEvaluator object to measure policy performance every 10
             % episodes
-            evaluator = rlEvaluator(...
-                NumEpisodes=1,...
-                EvaluationFrequency=2);
+%             evaluator = rlEvaluator(...
+%                 NumEpisodes=1,...
+%                 EvaluationFrequency=2);
             % Train the agent.
-            trainingResults = train(agent,env,trainOpts,Evaluator=evaluator);
+            trainingResults = train(agent,env,trainOpts);
         
             % save results
             save(AGENT_FNAME,'agent')
